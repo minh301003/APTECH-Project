@@ -10,9 +10,37 @@
     </div>
     <!-- Content Row -->
     <div class="row">
+        {{-- Alert --}}
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         @if (session('message'))
-            <h5 class="alert alert-success">{{ session('message') }} </h5>
+            <script>
+                swal("{{ session('message') }}");
+            </script>
         @endif
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                               Khách hàng kim cương
+                            </div>
+                            @foreach($bestUser  as $row)
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                {{ $row->name }}
+                            </div>
+                            @endforeach
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
         <table class="table table-striped">
             <thead>
             <tr>
