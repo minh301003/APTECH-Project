@@ -1,0 +1,39 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('order_detail', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('order_ID');
+            $table->unsignedBigInteger('user_ID');
+            // $table->unsignedBigInteger('User_name');
+            // $table->string('User_address');
+            // $table->string('User_phone');
+            $table->unsignedBigInteger('product_ID');
+            $table->integer('amount');
+            $table->decimal('total',15,0);
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('order_detail');
+    }
+};
