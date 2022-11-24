@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\ProductFormRequest;
 use App\Models\Catalog;
+use App\Models\Order;
+use App\Models\OrderDetail;
+use App\Models\Rate;
 
 class AdminProductsController extends Controller
 {
@@ -21,7 +24,28 @@ class AdminProductsController extends Controller
     {
         //danh sách sản phẩm trong admin
         $products = Product::all();
-        return view('/admin/admin_products/products', compact('products'));
+        //Sản phẩm được mua nhiều nhất
+        $buyProductLists = OrderDetail::select('product_ID',DB::raw('sum(amount) as total'))
+            ->groupBy('product_ID')
+            ->orderBy('total', 'DESC')
+            ->limit(1)
+            ->get();
+
+        $mostBuyProduct = Product::whereIn('id', $buyProductLists->pluck('product_ID'))
+                        ->select('name')
+                        ->get();
+        //Tổng số sản phẩm
+        $numberOfProducts = Product::count();
+
+        //Sản phẩm được đánh giá tốt nhất
+        $top_rated_product = Product::select('products.name')
+                            ->Join('rate', 'products.ID', 'rate.product_ID')
+                            ->orderBy('rate.star', 'DESC')
+                            ->limit(1)
+                            ->get();
+
+        return view('/admin/admin_products/products', compact('products', 
+                    'mostBuyProduct', 'numberOfProducts', 'top_rated_product'));
     }
 
     /**

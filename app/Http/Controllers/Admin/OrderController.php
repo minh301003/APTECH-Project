@@ -5,6 +5,7 @@ use App\Models\Order;
 use App\Mail\OrderMail;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class OrderController extends Controller
 {
@@ -16,7 +17,17 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::all();
-        return view('/admin/admin_order/order', compact('orders'));
+        //tổng số đơn
+        $numberOfOrders = Order::count();
+        //doanh thu theo tháng
+        $thisMonth = Carbon::now()->format('m');
+        $sumThisMonth = Order::whereMonth('created_at', $thisMonth)->where('accept_status', '1')->sum('total');
+
+         //doanh thu theo năm
+         $thisYear = Carbon::now()->format('Y');
+         $sumThisYear = Order::whereYear('created_at', $thisYear)->where('accept_status', '1')->sum('total');
+
+        return view('/admin/admin_order/order', compact('orders', 'numberOfOrders', 'sumThisMonth', 'sumThisYear'));
     }
 
     /**
